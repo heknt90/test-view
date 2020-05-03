@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VueJS</title>
+
+    <!-- Подключение Vue -->
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+
+    <!-- Подулючение ElementUI -->
+    <!-- import CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+    <!-- import JavaScript -->
+    <script src="https://unpkg.com/element-ui/lib/index.js"></script>
+
+</head>
+<body>
+    <el-link type="success" href="test-ui.html">Test UI</el-link>
+    
+    <style>
+        .el-dropdown-link {
+          cursor: pointer;
+          color: #409EFF;
+        }
+        .el-icon-arrow-down {
+          font-size: 12px;
+        }
+      </style>  
+
+    <div id="app">
+        <!-- Меню навигации -->
+        <el-menu
+            :default-active="activeIndex"
+            class="el-menu-demo"
+            mode="horizontal"
+            @select="handleSelect"
+            background-color="#545c64"
+            text-color="#fff"
+            active-text-color="#ffd04b">
+            <el-menu-item index="1">На главную</el-menu-item>
+            <el-submenu index="2">
+                <template slot="title">Workspace</template>
+                <el-menu-item index="2-1">item one</el-menu-item>
+                <el-menu-item index="2-2">item two</el-menu-item>
+                <el-menu-item index="2-3">item three</el-menu-item>
+                <el-submenu index="2-4">
+                    <template slot="title">item four</template>
+                    <el-menu-item index="2-4-1">item one</el-menu-item>
+                    <el-menu-item index="2-4-2">item two</el-menu-item>
+                    <el-menu-item index="2-4-3">item three</el-menu-item>
+                </el-submenu>
+            </el-submenu>
+            <el-menu-item index="3" disabled>Info</el-menu-item>
+            <el-menu-item index="4"><a href="https://www.ele.me" target="_blank">Orders</a></el-menu-item>
+        
+            <el-menu-item>
+                <el-dropdown>
+                    <el-button type="primary">
+                        Иванов И.И.<i class="el-icon-arrow-down el-icon--right"></i>
+                    </el-button>
+                    <el-dropdown-menu slot="dropdown">
+                        <el-dropdown-item>Настройки</el-dropdown-item>
+                        <el-dropdown-item>Выйти</el-dropdown-item>
+                    </el-dropdown-menu>
+                </el-dropdown>
+            </el-menu-item>
+        
+                
+        </el-menu>
+      
+        <el-dropdown>
+            <span class="el-dropdown-link">
+              Dropdown List<i class="el-icon-arrow-down el-icon--right"></i>
+            </span>
+            <el-dropdown-menu slot="dropdown">
+              <el-dropdown-item>Action 1</el-dropdown-item>
+              <el-dropdown-item>Action 2</el-dropdown-item>
+              <el-dropdown-item>Action 3</el-dropdown-item>
+              <el-dropdown-item disabled>Action 4</el-dropdown-item>
+              <el-dropdown-item divided>Action 5</el-dropdown-item>
+            </el-dropdown-menu>
+          </el-dropdown>
+          
+          
+
+
+    </div>
+    
+
+    <script>
+
+        var app = new Vue({
+            el: '#app',
+            data: {
+                activeIndex: '2',
+            },
+            methods: {
+                handleSelect(key, keyPath) {
+                    console.log(key, keyPath);
+                }
+            }
+        })
+
+    </script>
+    <script>
+        Vue.component('todo-item', {
+            props: ['todo'],
+            template: '<li>{{ todo.text }}</li>'
+        })
+
+        
+        app = new Vue({
+            el: "#app",
+            data: {
+                message: "toster",
+            },
+        })
+
+    </script>
+</body>
+</html>
