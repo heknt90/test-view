@@ -14,77 +14,201 @@
     <!-- import JavaScript -->
     <script src="https://unpkg.com/element-ui/lib/index.js"></script>
 
+    <script src="js/data.js"></script>
+
 </head>
 <body>
     
+    <style>
+        .el-dropdown-link {
+          cursor: pointer;
+          color: #409EFF;
+        }
+        .el-icon-arrow-down {
+          font-size: 12px;
+        }
+      </style>  
+
     <div id="app">
-        <el-link type="success" href="test-ui.html">Test UI</el-link>
-        <br>
-        <p>
-            {{ message }}
-        </p>
+        <!-- Меню навигации -->
+        <el-menu
+            :default-active="activeIndex"
+            class="el-menu-demo"
+            mode="horizontal"
+            @select="handleSelect"
+            background-color="#545c64"
+            text-color="#fff"
+            active-text-color="#ffd04b"
+            type="flex"
+            justify="end">
+            
+                <el-submenu index="1" v-if="isAuthorized">
+                    <template slot="title">{{ruleForm.name}}</template>
+                    <el-menu-item index="1-1" disabled>Настройки</el-menu-item>
+                    <el-menu-item index="1-2" @click="logoutForm">Выйти</el-menu-item>
+                </el-submenu>
+
+                <template v-else>
+                    <el-menu-item index="1-1">Войти</el-menu-item>
+                    <el-menu-item index="1-2" disable title="На данный момент регистрация недоступна">Зарегистрироваться</el-menu-item>
+                </template>
+            
+        </el-menu>
+      
+        <template v-if="!isAuthorized">
+
+            <el-form :model="ruleForm" status-icon :rules="rules" ref="ruleForm" label-width="120px" class="demo-ruleForm">
+                <el-form-item label="Имя пользователя" prop="name">
+                  <el-input v-model="ruleForm.name"></el-input>
+                </el-form-item>
+                <el-form-item label="Пароль" prop="pass">
+                  <el-input type="password" v-model="ruleForm.pass" autocomplete="off"></el-input>
+                </el-form-item>
+                <el-form-item label="Подтверждение" prop="checkPass">
+                  <el-input type="password" v-model="ruleForm.checkPass" autocomplete="off"></el-input>
+                </el-form-item>
+                <el-form-item>
+                    <el-button type="primary" @click="loginForm('ruleForm')">Войти</el-button>
+                </el-form-item>
+              </el-form>
+              
+        </template>
+
+        <template v-if="isAuthorized">
+
+            <el-container style="height: 500px; border: 1px solid #eee">
+                
+                
+                <el-main>
+                    <el-row>
+                        <h2 style='text-align:center'>В обработке</h2>
+                    </el-row>
+                    
+                    <el-card :gutter="10" class="box-card" style="margin-bottom: 10px; width:400px" shadow="hover" v-for="(task, index) in this.data.myQuery" :task="task" :key="index" >
+                        <el-row :span="8" type="flex" justify="space-between">
+                            <el-col :span="8">
+                                <div>{{task.id}}</div>
+                                <div style="color:teal">{{task.id_status}}</div>
+                                <div>{{task.debt}}</div>
+                            </el-col>
+                            <el-col><el-button plain>Детали</el-button></el-col>
+                            <el-col><el-button type="warning" plain>Отказаться</el-button></el-col>
+                        </el-row> 
+                    </el-card>
+                </el-main>
+
+                <el-aside width="500px" style="background-color: rgb(238, 241, 246); padding: 10px;">
+                    <el-row>
+                        <h2 style='text-align:center'>Список необработанных займов</h2>
+                    </el-row>
+                    
+                    <el-card :gutter="10" class="box-card" style="margin-bottom: 10px;" shadow="hover" v-for="(task, index) in this.data.commonQuery" :task="task" :key="index" @click="takeTask(index)">
+                        <el-row :span="8" type="flex" justify="space-between">
+                            <el-col :span="8">
+                                <div>{{task.id}}</div>
+                                <div style="color:teal">{{task.id_status}}</div>
+                                <div>{{task.debt}}</div>
+                            </el-col>
+                            <el-col><el-button plain>Детали</el-button></el-col>
+                            <el-col><el-button type="primary" plain>Взять</el-button></el-col>
+                        </el-row> 
+                    </el-card>
+
+                </el-aside>
+                
+              </el-container>
+
+        </template>
+          
+
+
     </div>
+    
 
-    <script src="https://cdn.jsdelivr.net/npm/axios@0.12.0/dist/axios.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/lodash@4.13.1/lodash.min.js"></script>
+    <script>
 
-    <div id="watch-example">
-        <p>
-          Задайте вопрос, на который можно ответить «да» или «нет»:
-          <input v-model="question">
-        </p>
-        <p>{{ answer }}</p>
-      </div>
+        
 
-<script>
-var watchExampleVM = new Vue({
-  el: '#watch-example',
-  data: {
-    question: '',
-    answer: 'Пока вы не зададите вопрос, я не могу ответить!'
-  },
-  watch: {
-    // эта функция запускается при любом изменении вопроса
-    question: function (newQuestion, oldQuestion) {
-      this.answer = 'Ожидаю, когда вы закончите печатать...'
-      this.debouncedGetAnswer()
-    }
-  },
-  created: function () {
-    // _.debounce — это функция lodash, позволяющая ограничить то,
-    // насколько часто может выполняться определённая операция.
-    // В данном случае мы ограничиваем частоту обращений к yesno.wtf/api,
-    // дожидаясь завершения печати вопроса перед отправкой ajax-запроса.
-    // Узнать больше о функции _.debounce (и её родственнице _.throttle),
-    // можно в документации: https://lodash.com/docs#debounce
-    this.debouncedGetAnswer = _.debounce(this.getAnswer, 500)
-  },
-  methods: {
-    getAnswer: function () {
-      if (this.question.indexOf('?') === -1) {
-        this.answer = 'Вопросы обычно заканчиваются вопросительным знаком. ;-)'
-        return
-      }
-      this.answer = 'Думаю...'
-      var vm = this
-      axios.get('https://yesno.wtf/api')
-        .then(function (response) {
-            if (response.data.answer == 'yes') {
-                vm.answer = "ДА"
-            }
-            else if(response.data.answer == 'no') {
-                vm.answer = "НЕТ"
-            }
-            else {
-                vm.answer = _.capitalize(response.data.answer)
+        var app = new Vue({
+            el: '#app',
+            data: {
+                activeIndex: '1',
+                isAuthorized: false,
+                // login, register, process
+                appState: "login",
+                ruleForm: {
+                    pass: '',
+                    checkPass: '',
+                    name: ''
+                },
+                rules: {
+                    pass: [
+                        { validator: this.validatePass, trigger: 'blur' }
+                    ],
+                    checkPass: [
+                        { validator: this.validatePass2, trigger: 'blur' }
+                    ],
+                },
+                data: {
+                    commonQuery: commonQuery,
+                    myQuery: myQuery,
+                    dataDetail: dataDetail,
+                }
+            },
+            created: function() {
+                if (window.localStorage.getItem("testApp")) {
+                    let data = JSON.parse(window.localStorage.getItem('testApp'));
+                    this.isAuthorized = data.isAuthorized;
+                    this.ruleForm.name = data.name;
+                    // console.log(this.isAuthorized, this.ruleForm.name);
+                    
+                }
+            },
+            methods: {
+                handleSelect(key, keyPath) {
+                    console.log(key, keyPath);
+                },
+                validatePass (rule, value, callback) {
+                    if (value === '') {
+                    callback(new Error('Пожалуйста, введите пароль'));
+                    } else {
+                    if (this.ruleForm.checkPass !== '') {
+                        this.$refs.ruleForm.validateField('checkPass');
+                    }
+                    callback();
+                    }
+                },
+                validatePass2 (rule, value, callback) {
+                    if (value === '') {
+                    callback(new Error('Пожалуйста, введите пароль еще раз'));
+                    } else if (value !== this.ruleForm.pass) {
+                    callback(new Error('Пароли не совпадают!'));
+                    } else {
+                    callback();
+                    }
+                },
+                loginForm(formName) {
+                    this.isAuthorized = true;
+                    let data = JSON.stringify({name: this.ruleForm.name, isAuthorized: this.isAuthorized})
+                    window.localStorage.setItem('testApp', data)
+                },
+                logoutForm() {
+                    this.isAuthorized = false;
+                    this.ruleForm.name = ''
+                    window.localStorage.removeItem("testApp")
+                },
+                
+                resetForm(formName) {
+                    this.$refs[formName].resetFields();
+                },
+                takeTask(index) {
+                    let task = this.data.commonQuery[index];
+                    console.log(task);
+                    
+                },
             }
         })
-        .catch(function (error) {
-          vm.answer = 'Ошибка! Не могу связаться с API. ' + error
-        })
-    }
-  }
-})
-</script>
+
+    </script>
 </body>
 </html>
