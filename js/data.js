@@ -2,8 +2,12 @@
 
 var cQuery = []
 
+let count = Math.round(Math.random() * 300);
 
-for (let i = 0; i < 100; i++) {
+console.log(count);
+
+
+for (let i = 0; i < count; i++) {
     
     let id = 197 + i;
     let id_status = (Math.random() > .7 ? 'Installment' : 'PDL');
