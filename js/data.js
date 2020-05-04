@@ -1,92 +1,24 @@
 'use strict';
 
-var commonQuery = [
-    {
-        id: "128/345232",
-        id_status: "PDL",
-        debt: 34630
-    },
-    {
-        id: "128/345232",
-        id_status: "PDL",
-        debt: 34630
-    },
-    {
-        id: "128/345232",
-        id_status: "PDL",
-        debt: 34630
-    },
-    {
-        id: "128/345232",
-        id_status: "PDL",
-        debt: 34630
-    },
-    {
-        id: "128/345232",
-        id_status: "PDL",
-        debt: 34630
-    },
-    {
-        id: "128/345232",
-        id_status: "PDL",
-        debt: 34630
-    },
-    {
-        id: "128/345232",
-        id_status: "PDL",
-        debt: 34630
-    },
-    {
-        id: "128/345232",
-        id_status: "PDL",
-        debt: 34630
-    },
-    {
-        id: "128/345232",
-        id_status: "PDL",
-        debt: 34630
-    },
-    {
-        id: "128/345232",
-        id_status: "PDL",
-        debt: 34630
-    },
-    {
-        id: "128/345232",
-        id_status: "PDL",
-        debt: 34630
-    },
-    {
-        id: "128/345232",
-        id_status: "PDL",
-        debt: 34630
-    },
-    {
-        id: "128/345232",
-        id_status: "PDL",
-        debt: 34630
-    },
-    {
-        id: "128/345232",
-        id_status: "PDL",
-        debt: 34630
-    },
-    {
-        id: "128/345232",
-        id_status: "PDL",
-        debt: 34630
-    },
-    {
-        id: "128/345232",
-        id_status: "PDL",
-        debt: 34630
-    },
-    {
-        id: "128/345232",
-        id_status: "PDL",
-        debt: 34630
-    },
-]
+var cQuery = []
+
+
+for (let i = 0; i < 100; i++) {
+    
+    let id = 197 + i;
+    let id_status = (Math.random() > .7 ? 'Installment' : 'PDL');
+    
+    let obj = {
+        id: "128/345" + id,
+        id_status: id_status,
+        debt: Math.round(200000 * Math.random()),
+    };
+
+    cQuery.push(obj)
+}
+
+var commonQuery = cQuery.sort((a, b) => (a.debt < b.debt ? 1 : -1))
+
 
 var myQuery = [
     {

@@ -41,20 +41,21 @@
             active-text-color="#ffd04b"
             type="flex"
             justify="end">
-            
-                <el-submenu index="1" v-if="isAuthorized">
-                    <template slot="title">{{ruleForm.name}}</template>
-                    <el-menu-item index="1-1" disabled>Настройки</el-menu-item>
-                    <el-menu-item index="1-2" @click="logoutForm">Выйти</el-menu-item>
-                </el-submenu>
-
-                <template v-else>
-                    <el-menu-item index="1-1">Войти</el-menu-item>
-                    <el-menu-item index="1-2" disable title="На данный момент регистрация недоступна">Зарегистрироваться</el-menu-item>
-                </template>
+                <el-row type="flex" justify="end">
+                    <el-submenu index="1" v-if="isAuthorized">
+                        <template slot="title">{{ruleForm.name}}</template>
+                        <el-menu-item index="1-1" disabled>Настройки</el-menu-item>
+                        <el-menu-item index="1-2" @click="logoutForm">Выйти</el-menu-item>
+                    </el-submenu>
+    
+                    <template v-else>
+                        <el-menu-item >Войти</el-menu-item>
+                        <el-menu-item  disable title="На данный момент регистрация недоступна">Зарегистрироваться</el-menu-item>
+                    </template>
+                </el-row>
             
         </el-menu>
-      
+        
         <template v-if="!isAuthorized">
 
             <el-form :model="ruleForm" status-icon :rules="rules" ref="ruleForm" label-width="120px" class="demo-ruleForm">
@@ -83,16 +84,20 @@
                     <el-row>
                         <h2 style='text-align:center'>В обработке</h2>
                     </el-row>
+
+                    <p>В обработке: {{ this.data.myQuery.length }}</p>
                     
                     <el-card :gutter="10" class="box-card" style="margin-bottom: 10px; width:400px" shadow="hover" v-for="(task, index) in this.data.myQuery" :task="task" :key="index" >
                         <el-row :span="8" type="flex" justify="space-between">
                             <el-col :span="8">
-                                <div>{{task.id}}</div>
+                                <div>№{{task.id}}</div>
                                 <div style="color:teal">{{task.id_status}}</div>
-                                <div>{{task.debt}}</div>
+                                <div>{{task.debt}} ₽</div>
                             </el-col>
-                            <el-col><el-button plain>Детали</el-button></el-col>
-                            <el-col><el-button type="warning" plain>Отказаться</el-button></el-col>
+                            <el-button-group>
+                                <el-button plain>Детали</el-button>
+                                <el-button type="warning" plain style="margin-left:20px;">Отказаться</el-button>
+                            </el-button-group>
                         </el-row> 
                     </el-card>
                 </el-main>
@@ -101,16 +106,20 @@
                     <el-row>
                         <h2 style='text-align:center'>Список необработанных займов</h2>
                     </el-row>
+
+                    <p>Всего в очереди: {{ this.data.commonQuery.length }}</p>
                     
                     <el-card :gutter="10" class="box-card" style="margin-bottom: 10px;" shadow="hover" v-for="(task, index) in this.data.commonQuery" :task="task" :key="index" @click="takeTask(index)">
                         <el-row :span="8" type="flex" justify="space-between">
                             <el-col :span="8">
-                                <div>{{task.id}}</div>
+                                <div>№{{task.id}}</div>
                                 <div style="color:teal">{{task.id_status}}</div>
-                                <div>{{task.debt}}</div>
+                                <div>{{task.debt}} ₽</div>
                             </el-col>
-                            <el-col><el-button plain>Детали</el-button></el-col>
-                            <el-col><el-button type="primary" plain>Взять</el-button></el-col>
+                            <el-button-group>
+                                <el-button plain>Детали</el-button>
+                                <el-button type="primary" plain style="margin-left:20px;">Взять</el-button>
+                            </el-button-group>
                         </el-row> 
                     </el-card>
 
