@@ -38,10 +38,12 @@ var myQuery = [
 ]
 
 var dataDetail = {
+    contract: '128/345232',
     type: "PDL",
     fullName: "Иванов Иван Иванович",
     delay: 16,
     commonDebt: 34223,
+    comment: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Aperiam, placeat totam cupiditate delectus aspernatur soluta error voluptas, aliquam officia cumque eum reprehenderit natus doloremque? Aliquid minima asperiores dignissimos ut. Fugit tempora fugiat quisquam magni neque. Similique ex veritatis aut. Soluta odio ullam voluptas quas fugit saepe nemo, impedit tempore distinctio!",
     contacts: [
         {
             tel: "8 954 234 3465",

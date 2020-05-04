@@ -43,7 +43,7 @@
             justify="end">
                 <el-row type="flex" justify="end">
                     <el-submenu index="1" v-if="isAuthorized">
-                        <template slot="title">{{ruleForm.name}}</template>
+                        <template slot="title"> {{ruleForm.name}}</template>
                         <el-menu-item index="1-1" disabled>Настройки</el-menu-item>
                         <el-menu-item index="1-2" @click="logoutForm">Выйти</el-menu-item>
                     </el-submenu>
@@ -95,7 +95,7 @@
                                 <div>{{task.debt}} ₽</div>
                             </el-col>
                             <el-button-group>
-                                <el-button plain>Детали</el-button>
+                                <el-button plain @click="dialogLoanDetailVisible = true">Детали</el-button>
                                 <el-button type="warning" plain style="margin-left:20px;">Отказаться</el-button>
                             </el-button-group>
                         </el-row> 
@@ -117,7 +117,7 @@
                                 <div>{{task.debt}} ₽</div>
                             </el-col>
                             <el-button-group>
-                                <el-button plain>Детали</el-button>
+                                <el-button plain @click="dialogLoanDetailVisible = true">Детали</el-button>
                                 <el-button type="primary" plain style="margin-left:20px;">Взять</el-button>
                             </el-button-group>
                         </el-row> 
@@ -130,6 +130,61 @@
         </template>
           
 
+        <el-dialog
+            v-bind:title="'Договор №' + data.dataDetail.contract"
+            :visible.sync="dialogLoanDetailVisible"
+            width="600">
+            <el-row type="flex">
+                <el-col>
+                    <h4>Информация</h4>
+                    <p>Тип договора: {{ data.dataDetail.type }}</p>
+                    <p>ФИО: {{ data.dataDetail.fullName }}</p>
+                    <p>Дней просрочки: {{ data.dataDetail.delay }}</p>
+                    <p>Общая задолженность: {{ data.dataDetail.commonDebt }} руб.</p>
+                </el-col>
+                <el-col>
+                    <h4>Контакты</h4>
+                    <p v-for="contact in data.dataDetail.contacts">
+                        {{contact.tel}}
+                        {{contact.owner}}
+                        {{contact.lastCall}}
+                    </p>
+                    <!-- <el-table :data="data.dataDetail.contacts">
+                        <el-table-column prop="tel" label="Телефон"></el-table-column>
+                        <el-table-column prop="owner" label="Кому принадлежит"></el-table-column>
+                        <el-table-column prop="lastCall" label="Последний звонок"></el-table-column>
+                    </el-table> -->
+                </el-col>
+            </el-row>
+
+
+
+            <el-row type="flex" justify="space-between">
+                <h4>Комментарий оператора</h4>
+                <el-button type="primary" icon="el-icon-edit" @click="dialogEditCommentVisible = true" title="Изменить содержимое комментария к текущему заему"></el-button>
+            </el-row>
+
+            <p>{{data.dataDetail.comment}}</p>
+
+            <el-row type="flex" justify="center">
+                <el-button-group style="color:aqua">
+                    <el-button type="warning" title="Вернуться к обработке позже (отложить договор себе)">Отложить себе</el-button>
+                    <el-button type="danger" title="Действий по обработке не было, ОТМЕНА (вернуть в общую очередь)">Вернуть в очередь</el-button>
+                    <el-button type="success" title="Обработано. Не возвращаться к договору в ближайшее время">Завершить сделку</el-button>
+                </el-button-group>
+                </el-row>
+        </el-dialog>
+
+
+        <el-dialog
+            title="Редактировать комментарий к заему"
+            :visible.sync="dialogEditCommentVisible"
+            width="400">
+                <el-input type="textarea" :rows="7" v-model="data.dataDetail.comment"></el-input>
+                <el-button-group style="">
+                    <el-button type="success">Сохранить</el-button-group>
+                </el-button-group>
+        </el-dialog>
 
     </div>
     
@@ -143,6 +198,8 @@
             data: {
                 activeIndex: '1',
                 isAuthorized: false,
+                dialogLoanDetailVisible: false,
+                dialogEditCommentVisible: false,
                 // login, register, process
                 appState: "login",
                 ruleForm: {
