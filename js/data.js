@@ -1,11 +1,7 @@
 'use strict';
 
 var cQuery = []
-
 let count = Math.round(Math.random() * 300);
-
-console.log(count);
-
 
 for (let i = 0; i < count; i++) {
     

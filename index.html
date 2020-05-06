@@ -42,6 +42,8 @@
             type="flex"
             justify="end">
                 <el-row type="flex" justify="end">
+                    <el-menu-item index="3"><el-link href="index.html" style="color:#fff">Главная</el-link></el-menu-item>
+                    <el-menu-item index="2"><el-link href="examples.html" style="color:#fff">Examples</el-link></el-menu-item>
                     <el-submenu index="1" v-if="isAuthorized">
                         <template slot="title"> {{ruleForm.name}}</template>
                         <el-menu-item index="1-1" disabled>Настройки</el-menu-item>
@@ -149,11 +151,6 @@
                         {{contact.owner}}
                         {{contact.lastCall}}
                     </p>
-                    <!-- <el-table :data="data.dataDetail.contacts">
-                        <el-table-column prop="tel" label="Телефон"></el-table-column>
-                        <el-table-column prop="owner" label="Кому принадлежит"></el-table-column>
-                        <el-table-column prop="lastCall" label="Последний звонок"></el-table-column>
-                    </el-table> -->
                 </el-col>
             </el-row>
 
@@ -196,7 +193,7 @@
         var app = new Vue({
             el: '#app',
             data: {
-                activeIndex: '1',
+                activeIndex: '3',
                 isAuthorized: false,
                 dialogLoanDetailVisible: false,
                 dialogEditCommentVisible: false,

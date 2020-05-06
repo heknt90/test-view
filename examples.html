@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Примеры компонентов VueJS</title>
+
+    <!-- Подключение Vue -->
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+
+    <!-- Подулючение ElementUI -->
+    <!-- import CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+    <!-- import JavaScript -->
+    <script src="https://unpkg.com/element-ui/lib/index.js"></script>
+
+    <script src="js/data.js"></script>
+
+
+    <style>
+        .item {
+            margin-right: 30px;
+        }
+    </style>
+
+</head>
+<body>
+    
+    <style>
+
+        .el-dropdown-link {
+          cursor: pointer;
+          color: #409EFF;
+        }
+
+        .el-icon-arrow-down {
+          font-size: 12px;
+        }
+
+        .el-carousel__item h3 {
+            color: #475669;
+            font-size: 14px;
+            opacity: 0.75;
+            line-height: 200px;
+            margin: 0;
+        }
+        
+        
+        .el-carousel__item:nth-child(2n) {
+            background-color: #99a9bf;
+        }
+        
+        .el-carousel__item:nth-child(2n+1) {
+            background-color: #d3dce6;
+        }
+
+        .medium {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 48px!important;
+            color: #fff!important;
+            text-shadow: 1px 1px #000;
+        }
+      </style>  
+
+    <div id="app">
+        <!-- Меню навигации -->
+        <el-menu
+            :default-active="activeIndex"
+            class="el-menu-demo"
+            mode="horizontal"
+            background-color="#545c64"
+            text-color="#fff"
+            active-text-color="#ffd04b"
+            type="flex"
+            justify="end">
+                <el-row type="flex" justify="end">
+                    <el-menu-item index="3"><el-link href="index.html" style="color:#fff">Главная</el-link></el-menu-item>
+                    <el-menu-item index="2"><el-link href="examples.html" style="color:#fff">Examples</el-link></el-menu-item>
+                    
+                </el-row>
+            
+        </el-menu>
+
+        <el-row 
+            v-if="this.fullscreenLoading"    
+            v-loading="fullscreenLoading"
+            style="position: fixed; z-index: 1000; left: 0; right: 0; top: 0; bottom: 0; display: flex; justify-content: center; align-items:center; background-color:rgba(255, 255, 255, .7);">
+        
+        </el-row>
+
+        <ul style="list-style:none;">
+            <li>
+                <el-card>
+                    <header><h3>Badge</h3></header>
+                    <div>
+                        <el-badge :value="200" :max="99" class="item" type="success">
+                            <el-button size="small">comments</el-button>
+                        </el-badge>
+
+                        <el-badge :value="3" class="item" type="warning">
+                            <el-button size="small">replies</el-button>
+                        </el-badge>
+                        
+                        <el-badge value="new" class="item" type="primary">
+                            <el-button size="small">comments</el-button>
+                        </el-badge>
+                        <el-badge value="hot" class="item">
+                            <el-button size="small">replies</el-button>
+                        </el-badge>
+                        
+                        <el-badge is-dot class="item">
+                            <el-button class="share-button" icon="el-icon-share" type="primary"></el-button>
+                        </el-badge>
+
+
+                    </div>
+                    <p><el-link type="primary" href="https://element.eleme.io/#/en-US/component/badge">Документация</el-link></p>
+                </el-card>
+            </li>
+            <li>
+                <el-card>
+                    <header><h3>Collapse</h3></header>
+                    <div>
+                        
+                        <el-collapse v-model="activeNames" @change="handleChange">
+                            <el-collapse-item title="Consistency" name="1">
+                                <div>Consistent with real life: in line with the process and logic of real life, and comply with languages and habits that the users are used to;</div>
+                                <div>Consistent within interface: all elements should be consistent, such as: design style, icons and texts, position of elements, etc.</div>
+                            </el-collapse-item>
+                            <el-collapse-item title="Feedback" name="2">
+                                <div>Operation feedback: enable the users to clearly perceive their operations by style updates and interactive effects;</div>
+                                <div>Visual feedback: reflect current state by updating or rearranging elements of the page.</div>
+                            </el-collapse-item>
+                            <el-collapse-item title="Efficiency" name="3">
+                                <div>Simplify the process: keep operating process simple and intuitive;</div>
+                                <div>Definite and clear: enunciate your intentions clearly so that the users can quickly understand and make decisions;</div>
+                                <div>Easy to identify: the interface should be straightforward, which helps the users to identify and frees them from memorizing and recalling.</div>
+                            </el-collapse-item>
+                            <el-collapse-item title="Controllability" name="4">
+                                <div>Decision making: giving advices about operations is acceptable, but do not make decisions for the users;</div>
+                                <div>Controlled consequences: users should be granted the freedom to operate, including canceling, aborting or terminating current operation.</div>
+                            </el-collapse-item>
+                        </el-collapse>
+                        
+                    </div>
+                    <p><el-link type="primary" href="https://element.eleme.io/#/en-US/component/collapse">Документация</el-link></p>
+                </el-card>
+            </li>
+            <li>
+                <el-card>
+                    <header><h3>Тэги</h3></header>
+                    <div>
+                        <el-tag
+                        :key="tag"
+                        v-for="tag in dynamicTags"
+                        closable
+                        :disable-transitions="false"
+                        @close="handleClose(tag)">
+                        {{tag}}
+                        </el-tag>
+                        <el-input
+                        class="input-new-tag"
+                        v-if="inputVisible"
+                        v-model="inputValue"
+                        ref="saveTagInput"
+                        size="mini"
+                        @keyup.enter.native="handleInputConfirm"
+                        @blur="handleInputConfirm"
+                        >
+                        </el-input>
+                        <el-button v-else class="button-new-tag" size="small" @click="showInput">+ New Tag</el-button>
+                    </div>
+                    <p><el-link type="primary" href="https://element.eleme.io/#/en-US/component/tag">Документация</el-link></p>
+                </el-card>
+            </li>
+            <li>
+                <el-card>
+                    <header><h3>Drawer (выдвигающееся меню)</h3></header>
+                    <div>
+                        <el-button @click="drawer = true" type="primary" style="margin-left: 16px;">
+                            open
+                        </el-button>
+                          
+                        <el-drawer   
+                            title="I'm outer Drawer"
+                            :visible.sync="drawer"
+                            size="50%">
+                                <div>
+                                    <el-button @click="innerDrawer = true">Click me!</el-button>
+                                    <el-drawer
+                                        title="I'm inner Drawer"
+                                        :append-to-body="true"
+                                        :before-close="handleClose2"
+                                        :visible.sync="innerDrawer">
+                                        <p>_(:зゝ∠)_</p>
+                                    </el-drawer>
+                                </div>
+                        </el-drawer>
+                    </div>
+                    <p><el-link type="primary" href="https://element.eleme.io/#/en-US/component/drawer">Документация</el-link></p>
+                </el-card>
+            </li>
+            <li>
+                <el-card>
+                    <header><h3>Message</h3></header>
+                    <template>
+                        <el-button :plain="true" @click="open">Show message</el-button>
+                        <el-button :plain="true" @click="openVn">VNode</el-button>
+                    </template>
+                    <p><el-link type="primary" href="https://element.eleme.io/#/en-US/component/message">Документация</el-link></p>
+                </el-card>
+            </li>
+            <li>
+                <el-card>
+                    <header><h3>Notification</h3></header>
+                    <div>
+                        <template>
+                            <el-button
+                              plain
+                              @click="open1">
+                              Closes automatically
+                            </el-button>
+                            <el-button
+                              plain
+                              @click="open2">
+                              Won't close automatically
+                              </el-button>
+                          </template>
+                    </div>
+                    <p><el-link type="primary" href="https://element.eleme.io/#/en-US/component/notification">Документация</el-link></p>
+                </el-card>
+            </li>
+            <li>
+                <el-card>
+                    <header><h3>Бесконечная прокрутка (подгрузка вместо пагинации)</h3></header>
+                    <div>
+                        <div style="height: 300px; overflow-y: auto;">
+                            <template>
+                                <div class="infinite-list-wrapper" style="overflow:auto">
+                                  <ul
+                                    class="list"
+                                    v-infinite-scroll="load"
+                                    infinite-scroll-disabled="disabled">
+                                    <li v-for="i in count" class="list-item">{{ i }}</li>
+                                  </ul>
+                                  <p v-if="loading">Loading...</p>
+                                  <p v-if="noMore">No more</p>
+                                </div>
+                              </template>
+                        </div>
+                    </div>
+                    <p><el-link type="primary" href="https://element.eleme.io/#/en-US/component/infiniteScroll">Документация</el-link></p>
+                </el-card>
+            </li>
+            <li>
+                <el-card>
+                    <header><h3>Диалоговое окно</h3></header>
+                    <div>
+                        <el-button type="text" @click="dialogFormVisible = true">Открыть диалоговое окно</el-button>
+
+                        <el-dialog title="Shipping address" :visible.sync="dialogFormVisible">
+                        <el-form :model="form">
+                            <el-form-item label="Promotion name" :label-width="formLabelWidth">
+                            <el-input v-model="form.name" autocomplete="off"></el-input>
+                            </el-form-item>
+                            <el-form-item label="Zones" :label-width="formLabelWidth">
+                            <el-select v-model="form.region" placeholder="Please select a zone">
+                                <el-option label="Zone No.1" value="shanghai"></el-option>
+                                <el-option label="Zone No.2" value="beijing"></el-option>
+                            </el-select>
+                            </el-form-item>
+                        </el-form>
+                        <span slot="footer" class="dialog-footer">
+                            <el-button @click="dialogFormVisible = false">Cancel</el-button>
+                            <el-button type="primary" @click="dialogFormVisible = false">Confirm</el-button>
+                        </span>
+                        </el-dialog>
+                    </div>
+                    <p><el-link type="primary" href="https://element.eleme.io/#/en-US/component/dialog">Документация</el-link></p>
+                </el-card>
+            </li>
+            <li>
+                <el-card>
+                    <header><h3>Page header</h3></header>
+                    <div>
+                        <el-page-header @back="goBack" content="detail">
+                        </el-page-header>
+                    </div>
+                    <p><el-link type="primary" href="https://element.eleme.io/#/en-US/component/page-header">Документация</el-link></p>
+                </el-card>
+            </li>
+            <li>
+                <el-card>
+                    <header><h3>Переключатель</h3></header>
+                    <div>
+                        <el-switch v-model="value1">
+                        </el-switch>
+                    </div>
+                    <p><el-link type="primary" href="https://element.eleme.io/#/en-US/component/switch">Документация</el-link></p>
+                </el-card>
+            </li>
+            <li>
+                <el-card>
+                    <header><h3>Табы</h3></header>
+                    <div>
+                        <template>
+                            <el-radio-group v-model="tabPosition" style="margin-bottom: 30px;">
+                            <el-radio-button label="top">top</el-radio-button>
+                            <el-radio-button label="right">right</el-radio-button>
+                            <el-radio-button label="bottom">bottom</el-radio-button>
+                            <el-radio-button label="left">left</el-radio-button>
+                            </el-radio-group>
+                        
+                            <el-tabs :tab-position="tabPosition" style="height: 200px;">
+                            <el-tab-pane label="User">User</el-tab-pane>
+                            <el-tab-pane label="Config">Config</el-tab-pane>
+                            <el-tab-pane label="Role">Role</el-tab-pane>
+                            <el-tab-pane label="Task">Task</el-tab-pane>
+                            </el-tabs>
+                        </template>
+                    </div>
+                    <p><el-link type="primary" href="https://element.eleme.io/#/en-US/component/tabs">Документация</el-link></p>
+                </el-card>
+            </li>
+            <li>
+                <el-card>
+                    <header><h3>Карусель</h3></header>
+                    <div>
+                        <template>
+                            <el-carousel :interval="4000" type="card" height="200px">
+                              <el-carousel-item v-for="item in 6" :key="item">
+                                <h3 class="medium">{{ item }}</h3>
+                              </el-carousel-item>
+                            </el-carousel>
+                          </template>
+                          
+                          
+                    </div>
+                    <p><el-link type="primary" href="https://element.eleme.io/#/en-US/component/carousel">Документация</el-link></p>
+                </el-card>
+            </li>
+            <li>
+                <el-card>
+                    <header><h3>Карточка (товара или что-то там еще)</h3></header>
+                    <div>
+                        <el-row>
+                            <el-col :span="8" v-for="(o, index) in 2" :key="o" :offset="index > 0 ? 2 : 0">
+                              <el-card :body-style="{ padding: '0px' }">
+                                <img src="https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png" class="image">
+                                <div style="padding: 14px;">
+                                  <span>Yummy hamburger</span>
+                                  <div class="bottom clearfix">
+                                    <time class="time">{{ currentDate }}</time>
+                                    <el-button type="text" class="button">Operating</el-button>
+                                  </div>
+                                </div>
+                              </el-card>
+                            </el-col>
+                          </el-row>
+                    </div>
+                    <p><el-link type="primary" href="https://element.eleme.io/#/en-US/component/card">Документация</el-link></p>
+                </el-card>
+            </li>
+            <li>
+                <el-card>
+                    <header><h3>Другие инструменты</h3></header>
+                    <p></p>
+                    <ul>
+                        <li><el-link href="https://element.eleme.io/#/en-US/component/steps">Steps</el-link> - Разделение на этапы</li>
+                        <li><el-link href="https://element.eleme.io/#/en-US/component/timeline">Временная шкала</el-link> - Похоже на Steps, только с привязкой к определенной дате</li>
+                        <li><el-link href="https://element.eleme.io/#/en-US/component/icon">Иконки</el-link> - Иконки</li>
+                        <li><el-link href="https://element.eleme.io/#/en-US/component/button">Кнопки</el-link></li>
+                        <li><el-link href="https://element.eleme.io/#/en-US/component/progress">Progress</el-link> - Довольно много различных вариантов отображения прогресса </li>
+                        <li><el-link href="https://element.eleme.io/#/en-US/component/tree">Дерево</el-link> - Структурное дерево</li>
+                        <li><el-link href="https://element.eleme.io/#/en-US/component/alert">Alert</el-link> - Нечто, что можно использовать в виджетах и оповещениях</li>
+                        <li><el-link href="https://element.eleme.io/#/en-US/component/breadcrumbs">Хлебные крошки</el-link></li>
+                        <li><el-link href="https://element.eleme.io/#/en-US/component/radio">Radio</el-link> - Радиокнопки
+                            <p>А также другие элементы управления форм, такие как:</p>
+                            <ul>
+                                <li><el-link href="https://element.eleme.io/#/en-US/component/checkbox">Checkbox</el-link> </li>
+                                <li>input</li>
+                                <li>inputNumber</li>
+                                <li>Select</li>
+                                <li>Cascader</li>
+                                <li>Slider</li>
+                                <li>TimePicker</li>
+                                <li>DatePicker</li>
+                                <li>DateTimePicker</li>
+                                <li>Upload</li>
+                                <li>Rate</li>
+                                <li>ColorPicker</li>
+                                <li>Transfer</li>
+                            </ul>
+                        </li>
+                        <li><el-link href="https://element.eleme.io/#/en-US/component/popconfirm">Popconfirm</el-link> - миниподтверждение действия</li>
+                        <li><el-link href="https://element.eleme.io/#/en-US/component/tooltip">Tooltip</el-link> - Всплывающая подсказка</li>
+                        <li><el-link href="https://element.eleme.io/#/en-US/component/popover">Popover</el-link> - Вслывающее сообщение</li>
+                        <li><el-link href="https://element.eleme.io/#/en-US/component/avatar">Аватар</el-link></li>
+                        <li><el-link href="https://element.eleme.io/#/en-US/component/calendar">Календарь</el-link></li>
+                    </ul>
+                </el-card>
+            </li>
+        </ul>
+        
+    </div>
+    
+
+    <script>        
+
+        var app = new Vue({
+            el: '#app',
+            data: {
+                fullscreenLoading: true,
+                activeIndex: '2',
+                value1: true,
+                dynamicTags: ['Tag 1', 'Tag 2', 'Tag 3'],
+                inputVisible: false,
+                inputValue: '',
+                activeNames: ['1'],
+                drawer: false,
+                innerDrawer: false,
+                currentDate: new Date(),
+                tabPosition: 'left',
+                count: 0,
+                loading: false,
+                dialogFormVisible: false,
+                form: {
+                    name: '',
+                    region: '',
+                    date1: '',
+                    date2: '',
+                    delivery: false,
+                    type: [],
+                    resource: '',
+                    desc: ''
+                },
+                formLabelWidth: '120px'
+            },
+            created: function() {
+                this.openFullScreen1();
+            },
+            computed: {
+                noMore () {
+                    return this.count >= 20
+                },
+                disabled () {
+                    return this.loading || this.noMore
+                }
+            },
+            methods: {
+                handleClose(tag) {
+                    this.dynamicTags.splice(this.dynamicTags.indexOf(tag), 1);
+                },
+                handleClose2(done) {
+                    this.$confirm('You still have unsaved data, proceed?')
+                    .then(_ => {
+                        done();
+                    })
+                    .catch(_ => {});
+                },
+
+                showInput() {
+                    this.inputVisible = true;
+                    this.$nextTick(_ => {
+                        this.$refs.saveTagInput.$refs.input.focus();
+                    });
+                },
+
+                handleInputConfirm() {
+                    let inputValue = this.inputValue;
+                    if (inputValue) {
+                        this.dynamicTags.push(inputValue);
+                    }
+                    this.inputVisible = false;
+                    this.inputValue = '';
+                },
+                handleChange(val) {
+                    console.log(val);
+                },
+                open() {
+                    this.$message('This is a message.');
+                },
+
+                openVn() {
+                    const h = this.$createElement;
+                    this.$message({
+                    message: h('p', null, [
+                        h('span', null, 'Message can be '),
+                        h('i', { style: 'color: teal' }, 'VNode')
+                    ])
+                    });
+                },
+                open1() {
+                    const h = this.$createElement;
+
+                    this.$notify({
+                    title: 'Title',
+                    message: h('i', { style: 'color: teal' }, 'This is a reminder')
+                    });
+                },
+
+                open2() {
+                    this.$notify({
+                    title: 'Prompt',
+                    message: 'This is a message that does not automatically close',
+                    duration: 0
+                    });
+                },
+                openFullScreen1() {
+                    setTimeout(() => {
+                    this.fullscreenLoading = false;
+                    }, 2000);
+                },
+                load () {
+                    this.loading = true
+                    setTimeout(() => {
+                        this.count += 2
+                        this.loading = false
+                    }, 1500)
+                },
+                goBack() {
+                    alert('Была нажата кнопка назад');
+                },
+            }
+        })
+
+
+
+    </script>
+</body>
+</html>
