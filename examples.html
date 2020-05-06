@@ -21,6 +21,10 @@
         .item {
             margin-right: 30px;
         }
+        
+        .card-description {
+            color: #8f8c8c;
+        }
     </style>
 
 </head>
@@ -62,6 +66,13 @@
             color: #fff!important;
             text-shadow: 1px 1px #000;
         }
+
+        .custom-popover {
+            /* background-color: #E4E7ED; */
+            background: rgb(250, 236, 216);
+            /* border-color: #E6A23C;
+            border-width: 3px; */
+        }
       </style>  
 
     <div id="app">
@@ -90,38 +101,218 @@
         
         </el-row>
 
+        <h1>Демонстрация дефолтных компонентов ElementsUI</h1>
+
         <ul style="list-style:none;">
             <li>
                 <el-card>
-                    <header><h3>Badge</h3></header>
+                    
+                    <header><h3>Карточка (товара или что-то там еще)</h3></header>
                     <div>
-                        <el-badge :value="200" :max="99" class="item" type="success">
-                            <el-button size="small">comments</el-button>
-                        </el-badge>
-
-                        <el-badge :value="3" class="item" type="warning">
-                            <el-button size="small">replies</el-button>
-                        </el-badge>
-                        
-                        <el-badge value="new" class="item" type="primary">
-                            <el-button size="small">comments</el-button>
-                        </el-badge>
-                        <el-badge value="hot" class="item">
-                            <el-button size="small">replies</el-button>
-                        </el-badge>
-                        
-                        <el-badge is-dot class="item">
-                            <el-button class="share-button" icon="el-icon-share" type="primary"></el-button>
-                        </el-badge>
-
-
+                        <el-row>
+                            <el-col :span="8" v-for="(o, index) in 2" :key="o" :offset="index > 0 ? 2 : 0">
+                              <el-card :body-style="{ padding: '0px' }">
+                                <img src="https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png" class="image">
+                                <div style="padding: 14px;">
+                                  <span>Yummy hamburger</span>
+                                  <div class="bottom clearfix">
+                                    <time class="time">{{ currentDate }}</time>
+                                    <el-button type="text" class="button">Operating</el-button>
+                                  </div>
+                                </div>
+                              </el-card>
+                            </el-col>
+                          </el-row>
                     </div>
-                    <p><el-link type="primary" href="https://element.eleme.io/#/en-US/component/badge">Документация</el-link></p>
+                    <p class="card-description">
+                        Вывод на экран однотипных элементов с любым содержимым
+                    </p>
+                    <p><el-link type="primary" href="https://element.eleme.io/#/en-US/component/card">Документация</el-link></p>
                 </el-card>
             </li>
             <li>
                 <el-card>
-                    <header><h3>Collapse</h3></header>
+                    <el-badge value="!" :title="interest" type="danger">
+                        <header><h3>Drawer (выдвигающееся меню)</h3></header>
+                    </el-badge>
+                    <div>
+                        <el-button @click="drawer = true" type="primary" style="margin-left: 16px;">
+                            open
+                        </el-button>
+                          
+                        <el-drawer   
+                            title="I'm outer Drawer"
+                            :visible.sync="drawer"
+                            size="50%">
+                                <div>
+                                    <el-button @click="innerDrawer = true">Click me!</el-button>
+                                    <el-drawer
+                                        title="I'm inner Drawer"
+                                        :append-to-body="true"
+                                        :before-close="handleClose2"
+                                        :visible.sync="innerDrawer">
+                                        <p>_(:зゝ∠)_</p>
+                                    </el-drawer>
+                                </div>
+                        </el-drawer>
+                    </div>
+                    <p class="card-description">
+                        Способ спрятать элементы навигации
+                    </p>
+                    <p><el-link type="primary" href="https://element.eleme.io/#/en-US/component/drawer">Документация</el-link></p>
+                </el-card>
+            </li>
+            <li>
+                <el-card>
+                    <header><h3>Page header</h3></header>
+                    <div>
+                        <el-page-header @back="goBack" title="" content="Detail">
+                        </el-page-header>
+                    </div>
+                    <p class="card-description">
+                        Должно выглядеть, как на страницах приложения на мобильных устройствах
+                    </p>
+                    <p><el-link type="primary" href="https://element.eleme.io/#/en-US/component/page-header">Документация</el-link></p>
+                </el-card>
+            </li>
+            <li>
+                <el-card>
+                    <el-badge value="!" :title="interest" type="danger">
+                        <header><h3>Диалоговое окно</h3></header>
+                    </el-badge>
+                    <div>
+                        <el-button type="text" @click="dialogFormVisible = true">Открыть диалоговое окно</el-button>
+
+                        <el-dialog title="Shipping address" :visible.sync="dialogFormVisible">
+                        <el-form :model="form">
+                            <el-form-item label="Promotion name" :label-width="formLabelWidth">
+                            <el-input v-model="form.name" autocomplete="off"></el-input>
+                            </el-form-item>
+                            <el-form-item label="Zones" :label-width="formLabelWidth">
+                            <el-select v-model="form.region" placeholder="Please select a zone">
+                                <el-option label="Zone No.1" value="shanghai"></el-option>
+                                <el-option label="Zone No.2" value="beijing"></el-option>
+                            </el-select>
+                            </el-form-item>
+                        </el-form>
+                        <span slot="footer" class="dialog-footer">
+                            <el-button @click="dialogFormVisible = false">Cancel</el-button>
+                            <el-button type="primary" @click="dialogFormVisible = false">Confirm</el-button>
+                        </span>
+                        </el-dialog>
+                    </div>
+                    <p class="card-description">
+                        Диалоговые окна. Содержимое может быть любым
+                    </p>
+                    <p><el-link type="primary" href="https://element.eleme.io/#/en-US/component/dialog">Документация</el-link></p>
+                </el-card>
+            </li>
+            <li>
+                <el-card>
+                    <el-badge value="!" :title="interest" type="danger">
+                        <header><h3>Popover</h3></header>
+                    </el-badge>
+                    <div>
+                        <template>
+                            <el-popover
+                                placement="top"
+                                title="Title"
+                                width="200"
+                                trigger="click"
+                                content="this is content, this is content, this is content">
+                                <el-button slot="reference">Click to activate</el-button>
+                            </el-popover>
+
+                            <el-popover
+                                placement="right"
+                                width="400"
+                                trigger="click">
+                                    <el-table :data="gridData">
+                                        <el-table-column width="150" property="date" label="date"></el-table-column>
+                                        <el-table-column width="100" property="name" label="name"></el-table-column>
+                                        <el-table-column width="300" property="address" label="address"></el-table-column>
+                                    </el-table>
+                                    <el-button slot="reference">Click to activate</el-button>
+                            </el-popover>
+
+                            <el-popover
+                                placement="right"
+                                width="250"
+                                trigger="click">
+                                    <el-row type="flex" :data="data">
+                                        <el-col>
+                                            <h4>Договор №{{data.dataDetail.contract}}</h4>
+                                            <p>Тип договора: {{ data.dataDetail.type }}</p>
+                                            <p>ФИО: {{ data.dataDetail.fullName }}</p>
+                                            <p>Дней просрочки: {{ data.dataDetail.delay }}</p>
+                                            <p>Общая задолженность: {{ data.dataDetail.commonDebt }} руб.</p>
+                                        </el-col>
+                                    </el-row>
+                                    <el-button slot="reference">Click to activate</el-button>
+                            </el-popover>
+
+                            <!-- top/top-start/top-end/bottom/bottom-start/bottom-end/left/left-start/left-end/right/right-start/right-end -->
+                            <el-popover
+                                placement="right"
+                                popper-class="custom-popover"
+                                width="250"
+                                trigger="click">
+                                    <el-row type="flex" :data="data">
+                                        <el-col>
+                                            <h4>Договор №{{data.dataDetail.contract}}</h4>
+                                            <p>Тип договора: {{ data.dataDetail.type }}</p>
+                                            <p>ФИО: {{ data.dataDetail.fullName }}</p>
+                                            <p>Дней просрочки: {{ data.dataDetail.delay }}</p>
+                                            <p>Общая задолженность: {{ data.dataDetail.commonDebt }} руб.</p>
+                                        </el-col>
+                                    </el-row>
+                                    <el-card slot="reference" style="margin-top: 20px; width: 300px; cursor:pointer;" shadow="hover" title="Нажми для отображения/скрытия подробной информации">
+                                        <h4>Займ №{{data.dataDetail.contract}}</h4>
+                                        <el-row :span="8">
+                                            <div>Тип договора: <span style="color:teal">PDL</span></div>
+                                            <div>Общая задолженность: 36000 ₽</div>
+                                        </el-row>
+                                    </el-card>
+                            </el-popover>
+                        </template>
+                    </div>
+                    <p class="card-description">
+                        Возможно что-то вот такое лайтовое ты хотел вместо диалогового окна?
+                    </p>
+                    <p><el-link type="primary" href="https://element.eleme.io/#/en-US/component/popover">Документация</el-link></p>
+                </el-card>
+            </li>
+            <li>
+                <el-card>
+                    <header><h3>Табы</h3></header>
+                    <div>
+                        <template>
+                            <el-radio-group v-model="tabPosition" style="margin-bottom: 30px;">
+                            <el-radio-button label="top">top</el-radio-button>
+                            <el-radio-button label="right">right</el-radio-button>
+                            <el-radio-button label="bottom">bottom</el-radio-button>
+                            <el-radio-button label="left">left</el-radio-button>
+                            </el-radio-group>
+                        
+                            <el-tabs :tab-position="tabPosition" style="height: 200px;">
+                            <el-tab-pane label="User">User</el-tab-pane>
+                            <el-tab-pane label="Config">Config</el-tab-pane>
+                            <el-tab-pane label="Role">Role</el-tab-pane>
+                            <el-tab-pane label="Task">Task</el-tab-pane>
+                            </el-tabs>
+                        </template>
+                    </div>
+                    <p class="card-description">
+                        Способ скрыть контент. Добавляется небольшое меню в произвольном месте
+                    </p>
+                    <p><el-link type="primary" href="https://element.eleme.io/#/en-US/component/tabs">Документация</el-link></p>
+                </el-card>
+            </li>
+            <li>
+                <el-card>
+                    <el-badge value="!" :title="interest" type="danger">
+                        <header><h3>Collapse</h3></header>
+                    </el-badge>
                     <div>
                         
                         <el-collapse v-model="activeNames" @change="handleChange">
@@ -145,7 +336,63 @@
                         </el-collapse>
                         
                     </div>
+                    <p class="card-description">
+                        Один из способов спрятать содержимое. Отображение контента переключается по нажатии на его заголовок.
+                    </p>
                     <p><el-link type="primary" href="https://element.eleme.io/#/en-US/component/collapse">Документация</el-link></p>
+                </el-card>
+            </li>
+            <li>
+                <el-card>
+                    <header><h3>Переключатель</h3></header>
+                    <div>
+                        <el-switch
+                        style="display: block"
+                        v-model="value2"
+                        active-color="#13ce66"
+                        inactive-color="#ff4949"
+                        active-text="Pay by month"
+                        inactive-text="Pay by year">
+                        </el-switch>
+                    </div>
+                    <p class="card-description">
+                        По сути просто декоративный checkbox
+                    </p>
+                    <p><el-link type="primary" href="https://element.eleme.io/#/en-US/component/switch">Документация</el-link></p>
+                </el-card>
+            </li>
+            <li>
+                <el-card>
+                    <el-badge value="!" :title="interest" type="danger">
+                        <header><h3>Badge</h3></header>
+                    </el-badge>
+                    <div>
+                        <el-badge :value="200" :max="99" class="item" type="success">
+                            <el-button size="small">comments</el-button>
+                        </el-badge>
+
+                        <el-badge :value="3" class="item" type="warning">
+                            <el-button size="small">replies</el-button>
+                        </el-badge>
+                        
+                        <el-badge value="new" class="item" type="primary">
+                            <el-button size="small">comments</el-button>
+                        </el-badge>
+                        <el-badge value="hot" class="item">
+                            <el-button size="small">replies</el-button>
+                        </el-badge>
+                        
+                        <el-badge is-dot class="item">
+                            <el-button class="share-button" icon="el-icon-share" type="primary"></el-button>
+                        </el-badge>
+
+
+                    </div>
+                    <p class="card-description">
+                        Информационный элемент, навешиваемый чаще на навигационные элементы (кнопки, элементы меню и т.д.).
+                        Указывает на особый статус или важное событие
+                    </p>
+                    <p><el-link type="primary" href="https://element.eleme.io/#/en-US/component/badge">Документация</el-link></p>
                 </el-card>
             </li>
             <li>
@@ -172,49 +419,32 @@
                         </el-input>
                         <el-button v-else class="button-new-tag" size="small" @click="showInput">+ New Tag</el-button>
                     </div>
+                    <p class="card-description">
+                        В данном примере, помимо отображения тэгов, есть возможность управлять ими
+                    </p>
                     <p><el-link type="primary" href="https://element.eleme.io/#/en-US/component/tag">Документация</el-link></p>
                 </el-card>
             </li>
             <li>
                 <el-card>
-                    <header><h3>Drawer (выдвигающееся меню)</h3></header>
-                    <div>
-                        <el-button @click="drawer = true" type="primary" style="margin-left: 16px;">
-                            open
-                        </el-button>
-                          
-                        <el-drawer   
-                            title="I'm outer Drawer"
-                            :visible.sync="drawer"
-                            size="50%">
-                                <div>
-                                    <el-button @click="innerDrawer = true">Click me!</el-button>
-                                    <el-drawer
-                                        title="I'm inner Drawer"
-                                        :append-to-body="true"
-                                        :before-close="handleClose2"
-                                        :visible.sync="innerDrawer">
-                                        <p>_(:зゝ∠)_</p>
-                                    </el-drawer>
-                                </div>
-                        </el-drawer>
-                    </div>
-                    <p><el-link type="primary" href="https://element.eleme.io/#/en-US/component/drawer">Документация</el-link></p>
-                </el-card>
-            </li>
-            <li>
-                <el-card>
-                    <header><h3>Message</h3></header>
+                    <el-badge value="!" :title="interest" type="danger">
+                        <header><h3>Message</h3></header>
+                    </el-badge>
                     <template>
                         <el-button :plain="true" @click="open">Show message</el-button>
                         <el-button :plain="true" @click="openVn">VNode</el-button>
                     </template>
+                    <p class="card-description">
+                        Вывод оповещений
+                    </p>
                     <p><el-link type="primary" href="https://element.eleme.io/#/en-US/component/message">Документация</el-link></p>
                 </el-card>
             </li>
             <li>
                 <el-card>
-                    <header><h3>Notification</h3></header>
+                    <el-badge value="!" :title="interest" type="danger">
+                        <header><h3>Notification</h3></header>
+                    </el-badge>
                     <div>
                         <template>
                             <el-button
@@ -229,6 +459,9 @@
                               </el-button>
                           </template>
                     </div>
+                    <p class="card-description">
+                        Вывод оповещений на странице
+                    </p>
                     <p><el-link type="primary" href="https://element.eleme.io/#/en-US/component/notification">Документация</el-link></p>
                 </el-card>
             </li>
@@ -251,77 +484,11 @@
                               </template>
                         </div>
                     </div>
+                    <p class="card-description">
+                        По идее аналогия с подгружаемыми постами в Вконтакте (здесь работает немного не так, как нужно)
+                        Используется вместо пагинации
+                    </p>
                     <p><el-link type="primary" href="https://element.eleme.io/#/en-US/component/infiniteScroll">Документация</el-link></p>
-                </el-card>
-            </li>
-            <li>
-                <el-card>
-                    <header><h3>Диалоговое окно</h3></header>
-                    <div>
-                        <el-button type="text" @click="dialogFormVisible = true">Открыть диалоговое окно</el-button>
-
-                        <el-dialog title="Shipping address" :visible.sync="dialogFormVisible">
-                        <el-form :model="form">
-                            <el-form-item label="Promotion name" :label-width="formLabelWidth">
-                            <el-input v-model="form.name" autocomplete="off"></el-input>
-                            </el-form-item>
-                            <el-form-item label="Zones" :label-width="formLabelWidth">
-                            <el-select v-model="form.region" placeholder="Please select a zone">
-                                <el-option label="Zone No.1" value="shanghai"></el-option>
-                                <el-option label="Zone No.2" value="beijing"></el-option>
-                            </el-select>
-                            </el-form-item>
-                        </el-form>
-                        <span slot="footer" class="dialog-footer">
-                            <el-button @click="dialogFormVisible = false">Cancel</el-button>
-                            <el-button type="primary" @click="dialogFormVisible = false">Confirm</el-button>
-                        </span>
-                        </el-dialog>
-                    </div>
-                    <p><el-link type="primary" href="https://element.eleme.io/#/en-US/component/dialog">Документация</el-link></p>
-                </el-card>
-            </li>
-            <li>
-                <el-card>
-                    <header><h3>Page header</h3></header>
-                    <div>
-                        <el-page-header @back="goBack" content="detail">
-                        </el-page-header>
-                    </div>
-                    <p><el-link type="primary" href="https://element.eleme.io/#/en-US/component/page-header">Документация</el-link></p>
-                </el-card>
-            </li>
-            <li>
-                <el-card>
-                    <header><h3>Переключатель</h3></header>
-                    <div>
-                        <el-switch v-model="value1">
-                        </el-switch>
-                    </div>
-                    <p><el-link type="primary" href="https://element.eleme.io/#/en-US/component/switch">Документация</el-link></p>
-                </el-card>
-            </li>
-            <li>
-                <el-card>
-                    <header><h3>Табы</h3></header>
-                    <div>
-                        <template>
-                            <el-radio-group v-model="tabPosition" style="margin-bottom: 30px;">
-                            <el-radio-button label="top">top</el-radio-button>
-                            <el-radio-button label="right">right</el-radio-button>
-                            <el-radio-button label="bottom">bottom</el-radio-button>
-                            <el-radio-button label="left">left</el-radio-button>
-                            </el-radio-group>
-                        
-                            <el-tabs :tab-position="tabPosition" style="height: 200px;">
-                            <el-tab-pane label="User">User</el-tab-pane>
-                            <el-tab-pane label="Config">Config</el-tab-pane>
-                            <el-tab-pane label="Role">Role</el-tab-pane>
-                            <el-tab-pane label="Task">Task</el-tab-pane>
-                            </el-tabs>
-                        </template>
-                    </div>
-                    <p><el-link type="primary" href="https://element.eleme.io/#/en-US/component/tabs">Документация</el-link></p>
                 </el-card>
             </li>
             <li>
@@ -335,42 +502,25 @@
                               </el-carousel-item>
                             </el-carousel>
                           </template>
-                          
-                          
                     </div>
+                    <p class="card-description">
+                        Карусель. По дефолту есть и другие способы отображения
+                    </p>
                     <p><el-link type="primary" href="https://element.eleme.io/#/en-US/component/carousel">Документация</el-link></p>
                 </el-card>
             </li>
             <li>
                 <el-card>
-                    <header><h3>Карточка (товара или что-то там еще)</h3></header>
-                    <div>
-                        <el-row>
-                            <el-col :span="8" v-for="(o, index) in 2" :key="o" :offset="index > 0 ? 2 : 0">
-                              <el-card :body-style="{ padding: '0px' }">
-                                <img src="https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png" class="image">
-                                <div style="padding: 14px;">
-                                  <span>Yummy hamburger</span>
-                                  <div class="bottom clearfix">
-                                    <time class="time">{{ currentDate }}</time>
-                                    <el-button type="text" class="button">Operating</el-button>
-                                  </div>
-                                </div>
-                              </el-card>
-                            </el-col>
-                          </el-row>
-                    </div>
-                    <p><el-link type="primary" href="https://element.eleme.io/#/en-US/component/card">Документация</el-link></p>
-                </el-card>
-            </li>
-            <li>
-                <el-card>
                     <header><h3>Другие инструменты</h3></header>
-                    <p></p>
+                    <p class="card-description">
+                        Возможно какие-то из следующих элементов могут тоже пригодиться. Но это также не все элементы, которые предлагает библиотека
+                    </p>
                     <ul>
                         <li><el-link href="https://element.eleme.io/#/en-US/component/steps">Steps</el-link> - Разделение на этапы</li>
                         <li><el-link href="https://element.eleme.io/#/en-US/component/timeline">Временная шкала</el-link> - Похоже на Steps, только с привязкой к определенной дате</li>
-                        <li><el-link href="https://element.eleme.io/#/en-US/component/icon">Иконки</el-link> - Иконки</li>
+                        <li>
+                            <el-badge value="!" :title="interest" type="danger"><el-link href="https://element.eleme.io/#/en-US/component/icon"> Иконки</el-link></el-badge> - неплохой способ сэкономить место, если подобрать интуитивно понятные значки. Кстати набор готовых иконок в библиотеке уже есть и представлен по ссылке      
+                        </li>
                         <li><el-link href="https://element.eleme.io/#/en-US/component/button">Кнопки</el-link></li>
                         <li><el-link href="https://element.eleme.io/#/en-US/component/progress">Progress</el-link> - Довольно много различных вариантов отображения прогресса </li>
                         <li><el-link href="https://element.eleme.io/#/en-US/component/tree">Дерево</el-link> - Структурное дерево</li>
@@ -395,7 +545,7 @@
                             </ul>
                         </li>
                         <li><el-link href="https://element.eleme.io/#/en-US/component/popconfirm">Popconfirm</el-link> - миниподтверждение действия</li>
-                        <li><el-link href="https://element.eleme.io/#/en-US/component/tooltip">Tooltip</el-link> - Всплывающая подсказка</li>
+                        <!-- <li><el-link href="https://element.eleme.io/#/en-US/component/tooltip">Tooltip</el-link> - Всплывающая подсказка</li> -->
                         <li><el-link href="https://element.eleme.io/#/en-US/component/popover">Popover</el-link> - Вслывающее сообщение</li>
                         <li><el-link href="https://element.eleme.io/#/en-US/component/avatar">Аватар</el-link></li>
                         <li><el-link href="https://element.eleme.io/#/en-US/component/calendar">Календарь</el-link></li>
@@ -412,9 +562,11 @@
         var app = new Vue({
             el: '#app',
             data: {
+                interest: "Хотел обратить особое внимание на выделенные красной иконкой элементы. Мне кажется они очень даже могут исопльзоваться в данном проекте",
+                value1: true,
+                value2: true,
                 fullscreenLoading: true,
                 activeIndex: '2',
-                value1: true,
                 dynamicTags: ['Tag 1', 'Tag 2', 'Tag 3'],
                 inputVisible: false,
                 inputValue: '',
@@ -424,6 +576,28 @@
                 currentDate: new Date(),
                 tabPosition: 'left',
                 count: 0,
+                data: {
+                    commonQuery: commonQuery,
+                    myQuery: myQuery,
+                    dataDetail: dataDetail,
+                },
+                gridData: [{
+                    date: '2016-05-02',
+                    name: 'Jack',
+                    address: 'New York City'
+                }, {
+                    date: '2016-05-04',
+                    name: 'Jack',
+                    address: 'New York City'
+                }, {
+                    date: '2016-05-01',
+                    name: 'Jack',
+                    address: 'New York City'
+                }, {
+                    date: '2016-05-03',
+                    name: 'Jack',
+                    address: 'New York City'
+                }],
                 loading: false,
                 dialogFormVisible: false,
                 form: {
